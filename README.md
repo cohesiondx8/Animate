@@ -164,6 +164,10 @@ Default way of targeting an element to animate (no value required). This can be 
 Animations to be added to element when it is in view. To add multiple classes, seperate each class with a space (as you would normally).
 
 ### Optional element overrides
+##### `data-animation-duration`
+
+Overide the plugin `duration` option per element.
+
 ##### `data-animation-delay`
 
 Overide the plugin `delay` option per element.
