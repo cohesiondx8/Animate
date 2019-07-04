@@ -26,7 +26,6 @@
             disableFilter: null,
             callbackOnInit: function() {},
             callbackOnInView: function() {},
-            callbackOnAnimate: function() {},
         };
 
         this.supports = 'querySelector' in document && 'addEventListener' in window && 'classList' in el && Function.prototype.bind;
@@ -255,6 +254,13 @@
                     el.style.animationDuration = el.getAttribute('data-animation-duration');
                 }
 
+                if (!el.style.iteration && el.getAttribute('data-animation-iteration') && parseInt(el.getAttribute('data-animation-iteration')) > 0) {
+                    el.style.iteration = parseInt(el.getAttribute('data-animation-iteration'));
+                }
+                else {
+                    el.style.iteration = 1;
+                }
+
                 var animationDelay = parseInt(el.getAttribute('data-animation-delay'), 10) || this.options.delay;
                 var addAnimation = function(animation) {
                     el.classList.add(animation);
@@ -313,7 +319,7 @@
     Animate.prototype._doCallback = function(fn) {
         var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
         if (fn && this._isType('Function', fn)) {
-            fn(el);
+            fn(el, this);
         } else {
             console.error('Callback is not a function');
         }
@@ -349,9 +355,23 @@
             // Set animated attribute to true
             el.setAttribute('data-animated', true);
 
-            this._doCallback(this.options.callbackOnAnimate, el);
+            this._doCallback(this.iterations, el);
         }.bind(this));
+
     };
+
+    Animate.prototype.iterations = function (el, _context) {
+        if (el.style.iteration > 1) {
+            el.style.iteration -= 1;
+
+            // Remove animation classes and re-run it.
+            _context._removeAnimation(el);
+
+            setTimeout(function() {
+                _context._addAnimation(el);
+            }.bind(_context), 1);
+        }
+    }
 
     /**
      * Remove event listeners

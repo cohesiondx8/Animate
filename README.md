@@ -26,7 +26,6 @@ Trigger animations on elements when they are in view 👓.
         disableFilter: false,
         callbackOnInit: function() {},
         callbackOnInView: function(el) {},
-        callbackOnAnimate: function(el) {},
     });
     animate.init();
 </script>
@@ -148,11 +147,6 @@ Type: `Function` Default: `function(el){}`
 
 Function to run once the element is in the viewport (pass parameter to access the element).
 
-#### callbackOnAnimate 
-Type: `Function` Default: `function(el){}`
-
-Function to run once animation has completed (pass parameter to access the animated element).
-
 ## Element overrides
 
 ##### `data-animate`
@@ -183,6 +177,10 @@ Overide the plugin `removeAnimations` option per element.
 ##### `data-animation-reverse`
 
 Overide the plugin `reverse` option per element.
+
+##### `data-animation-iteration`
+
+Repeat the animation n number of times. 
 
 #### Examples
 ```html
