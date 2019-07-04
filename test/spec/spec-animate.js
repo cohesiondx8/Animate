@@ -78,13 +78,6 @@ describe('Animate', function () {
                 expect(window.addEventListener).toHaveBeenCalledWith('resize', jasmine.any(Function), false);
             }
         });
-        it("should fire DOMContentLoaded event listener if set", function() {
-            spyOn(document, 'addEventListener');
-            this.animate.init();
-            if(this.animate.options.onLoad === true) {
-                expect(document.addEventListener).toHaveBeenCalledWith('DOMContentLoaded', jasmine.any(Function));
-            }
-        });
         it('should expose public functions', function() {
             expect(this.animate.init).toEqual(jasmine.any(Function));
             expect(this.animate.kill).toEqual(jasmine.any(Function));

@@ -1,4 +1,5 @@
-/*! animate.js v1.4.0 | (c) 2018 Josh Johnson | https://github.com/jshjohnson/animate.js */
+/*! animate.js v1.4.1 | (c) 2019 Josh Johnson | https://github.com/jshjohnson/animate.js */
+/*! animate.js v1.4.1 | (c) 2018 Josh Johnson | https://github.com/jshjohnson/animate.js */
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         define(factory);
@@ -191,13 +192,13 @@
         var horizontalOffset = elementOffset[1];
 
         // Vertical
-        var isInViewFromTop = (dimensions.bottom - (dimensions.height * verticalOffset)) > 0;
-        var isInViewFromBottom = (dimensions.top + (dimensions.height * verticalOffset)) < viewportHeight;
+        var isInViewFromTop = (dimensions.bottom - verticalOffset) > 0;
+        var isInViewFromBottom = (dimensions.top + verticalOffset) < viewportHeight;
         var isInViewVertically = isInViewFromTop && isInViewFromBottom;
 
         // Horizontal
-        var isInViewFromLeft = (dimensions.right - (dimensions.width * horizontalOffset)) > 0;
-        var isInViewFromRight = (dimensions.left + (dimensions.width * horizontalOffset)) < viewportWidth;
+        var isInViewFromLeft = (dimensions.right - horizontalOffset) > 0;
+        var isInViewFromRight = (dimensions.left + horizontalOffset) < viewportWidth;
         var isInViewHorizontally = isInViewFromLeft && isInViewFromRight;
 
         return (isInViewVertically && isInViewHorizontally);
@@ -250,6 +251,11 @@
             if (classes) {
                 el.setAttribute('data-visibility', true);
                 var animations = classes.split(' ');
+
+                if (el.getAttribute('data-animation-duration')) {
+                    el.style.animationDuration = el.getAttribute('data-animation-duration');
+                }
+
                 var animationDelay = parseInt(el.getAttribute('data-animation-delay'), 10) || this.options.delay;
                 var addAnimation = function(animation) {
                     el.classList.add(animation);
@@ -367,10 +373,12 @@
      * @public
      */
     Animate.prototype.addEventListeners = function() {
-        if (this.options.onLoad) {
+        if (this.options.onLoad && (document.readyState === 'loading')) {
             document.addEventListener('DOMContentLoaded', function() {
                 this.render(true);
             }.bind(this));
+        } else if (this.options.onLoad) {
+            this.render(true); // Call render immediately if document already loaded
         }
 
         if (this.options.onResize) {
